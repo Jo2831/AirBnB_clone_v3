@@ -1,19 +1,20 @@
 #!/usr/bin/python3
+"""This module initiates the api"""
 from flask import Flask
 from models import storage
 from api.v1.views import app_views
 from os import getenv
-from flask_cors import CORS
 
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 app.register_blueprint(app_views)
 
-"""cors = CORS(app, resources={r'/*': {'origins': '0.0.0.0'}})"""
 
 @app.teardown_appcontext
 def show_tear(execute):
+    """Removes the current SQLAlchemy session after each request
+    is completed"""
     storage.close()
 
 
