@@ -16,3 +16,22 @@ from models.state import State
 def show_status():
     """An end point to retrive ok status as a response"""
     return jsonify({"status": "OK"})
+
+
+@app_views.route('/stats', methods=['GET'])
+def stats():
+    """An endpoint to retrive the number of each objects by type"""
+    mapper = {
+            "amenities": Amenity,
+            "cities": City,
+            "places": Place,
+            "reviews": Review,
+            "states": State,
+            "users": User
+            }
+
+    result = {}
+    for k, v in mapper.items():
+        result[k] = storage.count(v)
+
+    return jsonify(result)
